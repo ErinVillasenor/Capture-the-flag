@@ -1,0 +1,14 @@
+name: Capture the Flag
+main: com.gmail.firework4lj.main.Main
+version: 3.0
+author: firework4lj
+
+commands:
+  ctf:
+    description: Main capture the flag command.
+  ctfsetup:
+    description: Main capture the flag arena creation command.
+  arenasetup:
+    description: Main capture the flag arena setup command.
+  vote:
+    description: Main voting command
