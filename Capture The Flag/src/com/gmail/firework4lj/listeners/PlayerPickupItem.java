@@ -58,7 +58,7 @@ public class PlayerPickupItem implements Listener{
 				
 				Main.redflag.put("redflag", pn);
 				for(String pl : Main.ctfingame.keySet()){
-					Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.BLUE + pn + ChatColor.RED+ " Stole the redflag!");
+					main.msg(Bukkit.getPlayerExact(pl), ChatColor.BLUE + pn + ChatColor.RED+ " Stole the redflag!");
 				}
 				
 				
@@ -67,7 +67,7 @@ public class PlayerPickupItem implements Listener{
 		
 				Main.blueflag.put("blueflag", pn);
 				for(String pl : Main.ctfingame.keySet()){
-					Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.RED+pn+ChatColor.BLUE+" Stole the redflag!");
+					main.msg(Bukkit.getPlayerExact(pl), ChatColor.RED+pn+ChatColor.BLUE+" Stole the blueflag!");
 				}
 				
 				
@@ -76,7 +76,7 @@ public class PlayerPickupItem implements Listener{
 				
 				event.setCancelled(true);
 				for(String pl : Main.ctfingame.keySet()){
-					Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.RED + pn + ChatColor.GOLD	+ " Has captured the " + ChatColor.BLUE + "blue teams "+ ChatColor.GOLD + "flag!");
+					main.msg(Bukkit.getPlayerExact(pl), ChatColor.RED + pn + ChatColor.GOLD	+ " Has captured the " + ChatColor.BLUE + "blue teams "+ ChatColor.GOLD + "flag!");
 				}
 				int before = Main.redscore.get("red");
 				int after = before + 1;
@@ -84,13 +84,13 @@ public class PlayerPickupItem implements Listener{
 				// RESTART GAME MECHANICS
 				if (Main.redscore.get("red") == main.getConfig().getInt("max_points")) {
 					for(String pl : Main.ctfingame.keySet()){
-						Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.GOLD + "Good game! Team "+ ChatColor.RED + "red " + ChatColor.GOLD+ "wins! Restarting game in 15 seconds.");
+						main.msg(Bukkit.getPlayerExact(pl), ChatColor.GOLD + "Good game! Team "+ ChatColor.RED + "red " + ChatColor.GOLD+ "wins! Restarting game in 15 seconds.");
 					}
 					this.Reloadgame();
 				}else{
 				// END RESTART GAME MECHANICS
 				p.getInventory().remove(blueflag);
-				Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".bluefs.w")).dropItemNaturally(BlueFlag, blueflag).setVelocity(new Vector(0, 0, 0));;
+				Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".bluefs.w")).dropItemNaturally(BlueFlag, blueflag).setVelocity(new Vector(0D, 0D, 0D));;
 				Main.blueflag.clear();
 				}
 				if (drop.getItemStack().equals(redflag)) {
@@ -103,7 +103,7 @@ public class PlayerPickupItem implements Listener{
 				
 				event.setCancelled(true);
 				for(String pl : Main.ctfingame.keySet()){
-					Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.BLUE + pn + ChatColor.GOLD+ " Has captured the " + ChatColor.RED + "red teams "+ ChatColor.GOLD + "flag!");
+					main.msg(Bukkit.getPlayerExact(pl), ChatColor.BLUE + pn + ChatColor.GOLD+ " Has captured the " + ChatColor.RED + "red teams "+ ChatColor.GOLD + "flag!");
 				}
 				int before = (int) Main.bluescore.get("blue");
 				int after = (int) before + 1;
@@ -111,13 +111,13 @@ public class PlayerPickupItem implements Listener{
 				// Restart game mechanics
 				if (Main.bluescore.get("blue") == main.getConfig().getInt("max_points")) {
 					for(String pl : Main.ctfingame.keySet()){
-						Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.GOLD+"Good game! Team "+ChatColor.BLUE+"blue "+ChatColor.GOLD+"wins! Restarting game in 15 seconds.");
+						main.msg(Bukkit.getPlayerExact(pl), ChatColor.GOLD+"Good game! Team "+ChatColor.BLUE+"blue "+ChatColor.GOLD+"wins! Restarting game in 15 seconds.");
 					}
 					this.Reloadgame();
 				}else{
 				// End restart game mechanics
 				p.getInventory().remove(redflag);
-				Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).dropItemNaturally(RedFlag, redflag).setVelocity(new Vector(0, 0, 0));
+				Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).dropItemNaturally(RedFlag, redflag).setVelocity(new Vector(0D, 0D, 0D));
 				Main.redflag.clear();
 				}
 				if (drop.getItemStack().equals(blueflag)) {
@@ -141,6 +141,7 @@ public class PlayerPickupItem implements Listener{
 			event.setCancelled(false);
 		}
 	}
+	
 	/*
 	 * 
 	 * 
@@ -153,8 +154,8 @@ public class PlayerPickupItem implements Listener{
 	@SuppressWarnings("deprecation")
 	public void Reloadgame() {
 		for(String pl : Main.ctfingame.keySet()){
-			Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.GREEN+"Please vote for the next map with /vote (arena)");
-			Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.GREEN+"Available maps are:");
+			main.msg(Bukkit.getPlayerExact(pl), ChatColor.GREEN+"Please vote for the next map with /vote (arena)");
+			main.msg(Bukkit.getPlayerExact(pl), ChatColor.GREEN+"Available maps are:");
 			Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.AQUA+main.getConfig().getConfigurationSection("arenas").getKeys(false));
 		}
 		int seconds = 15;
@@ -166,7 +167,7 @@ public class PlayerPickupItem implements Listener{
 						String arena = main.getConfig().getConfigurationSection("arenas").getKeys(false).iterator().next();
 						Main.currentarena.put("arena", "arenas."+arena);
 						for(String pl : Main.ctfingame.keySet()){
-						Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.GREEN+"No votes! Loading map: "+ChatColor.GOLD+arena);
+							main.msg(Bukkit.getPlayerExact(pl), ChatColor.GREEN+"No votes! Loading map: "+ChatColor.GOLD+arena);
 						}
 						}else{
 						int maxValueInMap = (Collections.max(Main.votes.values()));
@@ -175,7 +176,7 @@ public class PlayerPickupItem implements Listener{
 								String arena = entry.getKey();
 								Main.currentarena.put("arena", "arenas."+arena);
 								for(String pl : Main.ctfingame.keySet()){
-									Bukkit.getPlayerExact(pl).sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.GREEN+"Loading map: "+ChatColor.GOLD+arena);
+									main.msg(Bukkit.getPlayerExact(pl), ChatColor.GREEN+"Loading map: "+ChatColor.GOLD+arena);
 								}
 							}
 						}
@@ -210,6 +211,8 @@ public class PlayerPickupItem implements Listener{
 						Main.armorenterinv.clear();
 						Main.mainenterinv.clear();
 						Main.xplevel.clear();
+						Main.voted.clear();
+						Main.votes.clear();
 						
 					}
 				}, (seconds * 20));

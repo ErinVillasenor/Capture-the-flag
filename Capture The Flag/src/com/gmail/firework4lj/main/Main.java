@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import com.gmail.firework4lj.commands.Classes;
 import com.gmail.firework4lj.commands.CommandsMain;
 import com.gmail.firework4lj.commands.Setup;
 import com.gmail.firework4lj.commands.Vote;
@@ -40,7 +41,7 @@ public class Main extends JavaPlugin{
 	public final static HashMap<String, String> currentarena = new HashMap<String, String>();
 	public final static HashMap<String, Integer> votes = new HashMap<String, Integer>();
 	public final static HashMap<String, Boolean> voted = new HashMap<String, Boolean>();
-
+	
 	@Override
 	public void onEnable(){
 		// Creating config:
@@ -64,6 +65,7 @@ public class Main extends JavaPlugin{
 		getCommand("ctfsetup").setExecutor(new Setup(this));
 		getCommand("arenasetup").setExecutor(new Setup(this));
 		getCommand("vote").setExecutor(new Vote(this));
+		getCommand("classes").setExecutor(new Classes(this));
 		
 		// Registering listeners:
 		PluginManager pm = getServer().getPluginManager();

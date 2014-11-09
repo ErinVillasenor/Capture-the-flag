@@ -12,3 +12,5 @@ commands:
     description: Main capture the flag arena setup command.
   vote:
     description: Main voting command
+  classes:
+    description: Class selection gui

@@ -26,7 +26,7 @@ public class PlayerAttack implements Listener{
 
 			} else if (Main.teamblue.containsKey(attacker.getName()) && (Main.teamblue.containsKey(player.getName()))  && Main.ctfingame.containsKey(player.getName())) {
 				e.setCancelled(true);
-				main.msg(attacker, ChatColor.RED+"Hey, no attacking your own team, blue!");
+				main.msg(attacker, ChatColor.BLUE+"Hey, no attacking your own team, blue!");
 			} else {
 				e.setCancelled(false);
 			}
