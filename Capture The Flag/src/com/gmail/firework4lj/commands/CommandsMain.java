@@ -42,6 +42,9 @@ public class CommandsMain implements CommandExecutor{
 		Location LobbySpawn = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".mains.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".mains.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".mains.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".mains.z"));
 		Location RedFlag = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".redfs.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".redfs.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".redfs.z"));
 		Location BlueFlag = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".bluefs.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".bluefs.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".bluefs.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".bluefs.z"));
+		Location bluespawn = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".blues.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".blues.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".blues.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".blues.z"));
+		Location redspawn = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".reds.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".reds.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".reds.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".reds.z"));
+
 		
 		ItemMeta rflag = redflag.getItemMeta();
 		ItemMeta bflag = blueflag.getItemMeta();
@@ -108,10 +111,7 @@ public class CommandsMain implements CommandExecutor{
 					
 					
 				}else if(args[0].equalsIgnoreCase("red")){
-					
-					
-					Location redspawn = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".reds.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".reds.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".reds.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".reds.z"));
-						if(Main.ctfingame.containsKey(p.getName())){
+					if(Main.ctfingame.containsKey(p.getName())){
 						Main.teamblue.remove(p.getName());
 						p.setGameMode(GameMode.ADVENTURE);
 						main.msg(p, ChatColor.GREEN + "You are now on the "+ ChatColor.RED + "red " + ChatColor.GREEN + "team");
@@ -133,8 +133,6 @@ public class CommandsMain implements CommandExecutor{
 						
 				}else if(args[0].equalsIgnoreCase("blue")){
 					
-					
-					Location bluespawn = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".blues.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".blues.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".blues.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".blues.z"));
 					if(Main.ctfingame.containsKey(p.getName())){
 					Main.teamred.remove(p.getName());
 					p.setGameMode(GameMode.ADVENTURE);

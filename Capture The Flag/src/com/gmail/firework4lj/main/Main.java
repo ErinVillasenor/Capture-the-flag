@@ -12,6 +12,7 @@ import com.gmail.firework4lj.listeners.ItemDespawn;
 import com.gmail.firework4lj.listeners.PlayerAttack;
 import com.gmail.firework4lj.listeners.PlayerInteractions;
 import com.gmail.firework4lj.listeners.PlayerPickupItem;
+import com.gmail.firework4lj.listeners.PlayerRespawn;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -70,6 +71,7 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new ItemDespawn(this), this);
 		pm.registerEvents(new PlayerInteractions(this), this);
 		pm.registerEvents(new PlayerAttack(this), this);
+		pm.registerEvents(new PlayerRespawn(this), this);
 	
 		// Registering default arena (1st in config)
 		if (this.getConfig().getConfigurationSection("arenas").getKeys(false).iterator().next() == null){
