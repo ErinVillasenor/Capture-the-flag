@@ -89,7 +89,11 @@ public class Main extends JavaPlugin{
 	@Override
 	public void onDisable(){
 		
-	// Clean up the flags on reload
+	// Remove all players safely from game
+		for(String pl : Main.ctfingame.keySet()){
+			Bukkit.getPlayerExact(pl).performCommand("ctf leave");
+		}
+		// Clean up the flags on reload
 		List<Entity> entlist = Bukkit.getWorld(this.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).getEntities();
 		for (Entity current : entlist) {
 			if (current instanceof Item) {

@@ -1,5 +1,7 @@
 package com.gmail.firework4lj.commands;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -11,6 +13,8 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.MemorySection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -44,7 +48,6 @@ public class CommandsMain implements CommandExecutor{
 		Location BlueFlag = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".bluefs.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".bluefs.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".bluefs.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".bluefs.z"));
 		Location bluespawn = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".blues.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".blues.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".blues.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".blues.z"));
 		Location redspawn = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".reds.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".reds.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".reds.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".reds.z"));
-
 		
 		ItemMeta rflag = redflag.getItemMeta();
 		ItemMeta bflag = blueflag.getItemMeta();
@@ -117,7 +120,7 @@ public class CommandsMain implements CommandExecutor{
 						main.msg(p, ChatColor.GREEN + "You are now on the "+ ChatColor.RED + "red " + ChatColor.GREEN + "team");
 						p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 14));
 						Main.teamred.put(p.getName(), "red");
-						main.msg(p, ChatColor.GREEN+ "Choose a class with /ctf class!");
+						main.msg(p, ChatColor.GREEN+ "Choose a class with /classes!");
 						p.teleport(redspawn);
 						if (p.getName().length() <= 12) {
 							p.setDisplayName(redName);
@@ -139,7 +142,7 @@ public class CommandsMain implements CommandExecutor{
 					main.msg(p, ChatColor.GREEN+"You are now on the "+ ChatColor.BLUE + "blue " + ChatColor.GREEN + "team");
 					p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
 					Main.teamblue.put(p.getName(), "blue");
-					main.msg(p, ChatColor.GREEN+"Choose a class with /ctf class!");
+					main.msg(p, ChatColor.GREEN+"Choose a class with /classes!");
 					p.teleport(bluespawn);
 					if (p.getName().length() <= 12) {
 						p.setDisplayName(blueName);
@@ -164,13 +167,17 @@ public class CommandsMain implements CommandExecutor{
 						Main.teamblue.remove(p.getName());
 						Main.ctfclass.remove(p.getName());
 						if (p.getInventory().contains(redflag)) {
-							Bukkit.broadcastMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.BLUE+ p.getName() + ChatColor.GOLD+ " has dropped the " + ChatColor.RED + "red "+ ChatColor.GOLD + "flag!");
+							for(String pl : Main.ctfingame.keySet()){
+								main.msg(Bukkit.getPlayerExact(pl), ChatColor.BLUE+ p.getName() + ChatColor.GOLD+ " has dropped the " + ChatColor.RED + "red "+ ChatColor.GOLD + "flag!");
+							}
 							Main.redflag.clear();
-							p.getWorld().dropItemNaturally(RedFlag, new ItemStack(Material.WOOL, 1, (short) 14)).setVelocity(new Vector(0D, 0D, 0D));
-						} else if (p.getInventory().contains(blueflag)) {
-							Bukkit.broadcastMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.RED+ p.getName() + ChatColor.GOLD+ " has dropped the " + ChatColor.BLUE+ "blue " + ChatColor.GOLD + "flag!");
+							Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).dropItemNaturally(RedFlag, redflag).setVelocity(new Vector(0D, 0D, 0D));
+							} else if (p.getInventory().contains(blueflag)) {
+							for(String pl : Main.ctfingame.keySet()){
+								main.msg(Bukkit.getPlayerExact(pl), ChatColor.RED+ p.getName() + ChatColor.GOLD+ " has dropped the " + ChatColor.BLUE+ "blue " + ChatColor.GOLD + "flag!");
+							}
 							Main.blueflag.clear();
-							Bukkit.getWorld("world").dropItemNaturally(BlueFlag, new ItemStack(Material.WOOL, 1, (short) 11)).setVelocity(new Vector(0D, 0D, 0D));
+							Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".bluefs.w")).dropItemNaturally(BlueFlag, blueflag).setVelocity(new Vector(0D, 0D, 0D));
 						}
 						p.getInventory().setHelmet(new ItemStack(Material.AIR));
 						p.getInventory().setBoots(new ItemStack(Material.AIR));
@@ -196,13 +203,21 @@ public class CommandsMain implements CommandExecutor{
 						}else{
 							main.msg(p, ChatColor.AQUA+"You are not in a game!");
 						}
+				}else if(args[0].equalsIgnoreCase("class")){
+					p.performCommand("classes");
 				}
 				}else if(args.length == 2){
+					p.sendMessage("test");
 					if(args[0].equalsIgnoreCase("classcreate")){
 							PlayerInventory inv = p.getInventory();
-							main.getConfig().set("Classes."+args[1]+".items", inv.getContents());
-							main.getConfig().set("Classes."+args[1]+".icon", inv.getItemInHand().getTypeId());
-							main.saveConfig();
+								YamlConfiguration c = new YamlConfiguration();
+								c.set("Classes."+args[1]+".items", inv.getContents());
+								c.set("Classes."+args[1]+".armor", inv.getArmorContents());
+								try {
+									c.save(new File("plugins/Capture_the_Flag/classes/"+args[1]+".yml"));
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							main.msg(p, ChatColor.AQUA+"Class created sucessfully");
 				}
 			}

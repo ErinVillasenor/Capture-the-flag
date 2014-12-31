@@ -66,7 +66,7 @@ public class PlayerInteractions implements Listener{
 	// CLASS SELECTION GUI
 	@EventHandler
 	  public void onInventoryClick(InventoryClickEvent e){
-	    if ((e.getInventory().getName().equals("       Select a Class      ")) && (e.getRawSlot() < 54) && (e.getRawSlot() > -1)) {
+	    if ((e.getInventory().getName().equals("           Select a Class")) && (e.getRawSlot() < 54) && (e.getRawSlot() > -1)) {
 	      e.getCursor();
 	      ItemStack itemclicked = e.getCurrentItem();
 	      Player p = (Player)e.getWhoClicked();

@@ -27,7 +27,7 @@ public class Setup implements CommandExecutor{
 			// Creating a spot for the arena data to be stored at.
 			main.getConfig().set("arenas."+args[1], "1");
 			main.saveConfig();
-			main.msg(p, ChatColor.RED+args[1]+ChatColor.AQUA+"has been created. Please do /arenasetup "+ChatColor.RED+args[1]+ChatColor.AQUA+" to begin setting up the arena.");
+			main.msg(p, ChatColor.RED+args[1]+ChatColor.AQUA+" has been created. Please do /arenasetup "+ChatColor.RED+args[1]+ChatColor.AQUA+" to begin setting up the arena.");
 			}else{
 			main.msg(p, ChatColor.DARK_RED+"Incorrect syntax, please use /ctfsetup new (arena name)");
 			}

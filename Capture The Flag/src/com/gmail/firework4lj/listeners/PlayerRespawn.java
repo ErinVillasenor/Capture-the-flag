@@ -43,7 +43,7 @@ public class PlayerRespawn implements Listener{
 			event.setRespawnLocation(redspawn);
 			p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 14));
 			if(Main.ctfclass.containsKey(pn)){
-			p.performCommand("ctf class "+Main.ctfclass.get(p.getName()));
+			p.performCommand("classes "+Main.ctfclass.get(p.getName()));
 			}else{
 				
 			}
@@ -51,7 +51,7 @@ public class PlayerRespawn implements Listener{
 			event.setRespawnLocation(bluespawn);
 			p.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
 			if(Main.ctfclass.containsKey(pn)){
-			p.performCommand("ctf class "+Main.ctfclass.get(p.getName()));
+			p.performCommand("classes "+Main.ctfclass.get(p.getName()));
 			}else{	
 			}
 		} else {
