@@ -31,8 +31,8 @@ public class Setup implements CommandExecutor{
 			}else{
 			main.msg(p, ChatColor.DARK_RED+"Incorrect syntax, please use /ctfsetup new (arena name)");
 			}
-			}
-			else if(args.length == 1){
+			
+			}else if(args.length == 1){
 			main.msg(p, ChatColor.DARK_RED+"Incorrect syntax, please use /ctfsetup new (arena name)");
 			}else{
 			main.msg(p, ChatColor.AQUA+"Welcome to the capture the flag setup wizard!");

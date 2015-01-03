@@ -76,12 +76,12 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new PlayerRespawn(this), this);
 	
 		// Registering default arena (1st in config)
-		if (this.getConfig().getConfigurationSection("arenas").getKeys(false).iterator().next() == null){
-		Bukkit.broadcastMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.DARK_RED+"Welcome to ctf, it appears you have not setup an arena to use yet.");
-		Bukkit.broadcastMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.DARK_RED+"Please do this by using /ctfsetup");
+		if (this.getConfig().getConfigurationSection("arenas") == null){	
+			getLogger().info("Welcome to ctf, it appears you have not setup an arena to use yet.");
+			getLogger().info("Please do this by using /ctfsetup when you are in-game.");
 		}else{
-		String arena = this.getConfig().getConfigurationSection("arenas").getKeys(false).iterator().next();
-		Main.currentarena.put("arena", "arenas."+arena);
+				String arena = this.getConfig().getConfigurationSection("arenas").getKeys(false).iterator().next();
+				Main.currentarena.put("arena", "arenas."+arena);
 		}
 		getLogger().info("Capture the Flag has been enabled.");
 	}
@@ -94,6 +94,7 @@ public class Main extends JavaPlugin{
 			Bukkit.getPlayerExact(pl).performCommand("ctf leave");
 		}
 		// Clean up the flags on reload
+		if (!Main.currentarena.isEmpty()){
 		List<Entity> entlist = Bukkit.getWorld(this.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).getEntities();
 		for (Entity current : entlist) {
 			if (current instanceof Item) {
@@ -104,7 +105,10 @@ public class Main extends JavaPlugin{
 				}
 			}
 		}
-	}
+	}else{
+		
+	}	
+}
 	
 	public final void msg(Player p, String msg) {
 		String prefix = (ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"]"+ChatColor.WHITE);

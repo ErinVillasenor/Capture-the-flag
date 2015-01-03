@@ -196,6 +196,7 @@ public class PlayerPickupItem implements Listener{
 								}else if(((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Blueflag")) {
 									current.remove();
 								}
+							}else{
 							}
 						}
 						Main.blueflag.clear();

@@ -205,7 +205,24 @@ public class CommandsMain implements CommandExecutor{
 						}
 				}else if(args[0].equalsIgnoreCase("class")){
 					p.performCommand("classes");
+					
+				}else if(args[0].equalsIgnoreCase("help")){
+					main.msg(p, ChatColor.DARK_RED+"---Capture the Flag---");
+					main.msg(p, ChatColor.GOLD+"Player Commands:");
+					main.msg(p, ChatColor.AQUA+"/ctf - Main command for the Capture the Flag plugin.");
+					main.msg(p, ChatColor.AQUA+"/ctf join - Allows you to join the current game.");
+					main.msg(p, ChatColor.AQUA+"/ctf red OR /ctf blue - After joining the game, allows you to choose a team.");
+					main.msg(p, ChatColor.AQUA+"/ctf leave - Allows you to safely exit the current game.");
+					main.msg(p, ChatColor.AQUA+"/ctf help - Displays this message.");
+					main.msg(p, ChatColor.AQUA+"/classes - List available classes.");
+					main.msg(p, ChatColor.AQUA+"/classes (class name) - Switches your current class to the class specified.");
+					main.msg(p, ChatColor.AQUA+"/vote (arena name) - Allows voting for a new arena during the end of a game.");
+					main.msg(p, ChatColor.GOLD+"Operator Commands:");
+					main.msg(p, ChatColor.AQUA+"/ctfsetup new (arena name) - Allows the creation of a new arena.");
+					main.msg(p, ChatColor.AQUA+"/arenasetup (arena name) (arena spawn point) - Allows you to edit the arena specified spawn points.");
 				}
+				
+				
 				}else if(args.length == 2){
 					p.sendMessage("test");
 					if(args[0].equalsIgnoreCase("classcreate")){
@@ -218,6 +235,7 @@ public class CommandsMain implements CommandExecutor{
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
+								main.getConfig().set("Classes."+args[1], args[1]);
 							main.msg(p, ChatColor.AQUA+"Class created sucessfully");
 				}
 			}

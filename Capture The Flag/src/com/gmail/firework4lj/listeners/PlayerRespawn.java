@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 import com.gmail.firework4lj.main.Main;
 
@@ -70,32 +71,33 @@ public class PlayerRespawn implements Listener{
 		ItemStack redflag = new ItemStack(Material.WOOL, 1,DyeColor.RED.getData());
 		ItemStack blueflag = new ItemStack(Material.WOOL, 1,DyeColor.BLUE.getData());
 		
-		Location bluef = new Location(p.getWorld(), main.getConfig().getDouble("location.Xblueflagspawn"), main.getConfig().getDouble("location.Yblueflagspawn"), main.getConfig().getDouble("location.Zblueflagspawn"));
-		Location redf = new Location(p.getWorld(), main.getConfig().getDouble("location.Xredflagspawn"), main.getConfig().getDouble("location.Yredflagspawn"), main.getConfig().getDouble("location.Zredflagspawn"));
-		
+		Location redf = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".redfs.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".redfs.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".redfs.z"));
+		Location bluef = new Location(Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".bluefs.w")), main.getConfig().getDouble(Main.currentarena.get("arena")+".bluefs.x"), main.getConfig().getDouble(Main.currentarena.get("arena")+".bluefs.y"), main.getConfig().getDouble(Main.currentarena.get("arena")+".bluefs.z"));
+
 		ItemMeta rflag = redflag.getItemMeta();
 		ItemMeta bflag = blueflag.getItemMeta();
 		
+		rflag.setDisplayName("Redflag");
+		redflag.setItemMeta(rflag);
+		bflag.setDisplayName("Blueflag");
+		blueflag.setItemMeta(bflag);
+		
 		if (p.getInventory().contains(blueflag)&&Main.ctfingame.containsKey(p.getName())) {
 			
-			rflag.setDisplayName("Redflag");
-			redflag.setItemMeta(rflag);
-			bflag.setDisplayName("Blueflag");
-			blueflag.setItemMeta(bflag);
-			
+			e.getDrops().clear();
+			Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".bluefs.w")).dropItemNaturally(bluef, blueflag).setVelocity(new Vector(0D, 0D, 0D));;
+			Main.blueflag.clear();
+			e.setDeathMessage(null);
 			for(String pl : Main.ctfingame.keySet()){
 				main.msg(Bukkit.getPlayerExact(pl), ChatColor.RED + pn + ChatColor.GOLD+ " Has dropped the " + ChatColor.BLUE + "blue "+ ChatColor.GOLD + "flag!");
 			}
-			e.getDrops().clear();
-			p.getWorld().dropItemNaturally(bluef, blueflag);
-			Main.blueflag.clear();
-
 		} else if (p.getInventory().contains(redflag)&&Main.ctfingame.containsKey(p.getName())) {
 			for(String pl : Main.ctfingame.keySet()){
 				main.msg(Bukkit.getPlayerExact(pl), ChatColor.RED + pn + ChatColor.GOLD+ " Has dropped the " + ChatColor.RED + "red "+ ChatColor.GOLD + "flag!");
 			}
+			e.setDeathMessage(null);
 			e.getDrops().clear();
-			p.getWorld().dropItemNaturally(redf, redflag);
+			Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).dropItemNaturally(redf, redflag).setVelocity(new Vector(0D, 0D, 0D));
 			Main.redflag.clear();
 		} else if(Main.ctfingame.containsKey(p.getName())){
 			e.getDrops().clear();
