@@ -8,6 +8,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.gmail.firework4lj.main.Main;
 
+	/* How this class works:
+	* 
+	* This class listens for entities damaging another entity.
+	* If the player is attacked by another player, the player is checked to first, be in the game. 
+	* If so, they are then checked to be on the other team. If both conditions are met, the victim then takes damage.
+	* If the players are on the same team, the damage is cancelled and the attacker is sent a message to stop attacking there own team.
+	* If the players are not in the game, the event is allowed and players can be damaged like normal.
+ 	*/
+
 public class PlayerAttack implements Listener{
 
 	private Main main;

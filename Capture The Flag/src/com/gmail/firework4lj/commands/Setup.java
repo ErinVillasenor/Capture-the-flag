@@ -8,6 +8,17 @@ import org.bukkit.entity.Player;
 
 import com.gmail.firework4lj.main.Main;
 
+	/* How this class works:
+	 * Player enters '/ctfsetup new test'
+	 * config stores the arena name "test".
+	 * Player then gets sent a message to use '/arenasetup test'
+	 * (If only '/ctfsetup' is entered, player gets an error and is shown how to use command.)
+	 * 
+	 * Player enters '/arenasetup test'
+	 * Player is then guided through a setup process where they have to stand on locations for main spawn, blue team spawn, red team spawn, red flag spawn, and blue flag spawn.
+	 * All the location data is stored in the main config. Location data pulled is world, x, y, and z.
+	 */
+
 public class Setup implements CommandExecutor{
 
 	private Main main;
@@ -22,6 +33,7 @@ public class Setup implements CommandExecutor{
 		int pz = p.getLocation().getBlockZ();
 		String pw = p.getLocation().getWorld().getName();
 		if(cmd.getName().equalsIgnoreCase("ctfsetup")){
+			if(p.isOp()){
 			if(args.length == 2){
 			if(args[0].equalsIgnoreCase("new")){
 			// Creating a spot for the arena data to be stored at.
@@ -38,7 +50,11 @@ public class Setup implements CommandExecutor{
 			main.msg(p, ChatColor.AQUA+"Welcome to the capture the flag setup wizard!");
 			main.msg(p, ChatColor.AQUA+"First, you need to create the arena with "+ChatColor.DARK_RED+"/ctfsetup new (arena name)");
 			}
+			}else{
+				main.msg(p, ChatColor.DARK_RED+"You must be opped to use this command!");
+			}
 		}else if(cmd.getName().equalsIgnoreCase("arenasetup")){
+			if(p.isOp()){
 			if(args.length == 1){
 				if(main.getConfig().getString("arenas."+args[0]) != null){
 					main.msg(p, ChatColor.AQUA+"Please stand on the LOBBY SPAWN POINT for "+ChatColor.RED+args[0]);
@@ -99,6 +115,9 @@ public class Setup implements CommandExecutor{
 				}
 			}else{
 				main.msg(p, ChatColor.DARK_RED+"Oops! Something messed up, make sure you are typing the commands correctly!");
+			}
+			}else{
+				main.msg(p, ChatColor.DARK_RED+"You must be opped to use this command!");
 			}
 		}
 		return false;

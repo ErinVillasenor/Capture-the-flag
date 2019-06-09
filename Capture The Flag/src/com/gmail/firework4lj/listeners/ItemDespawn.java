@@ -7,6 +7,12 @@ import org.bukkit.event.entity.ItemDespawnEvent;
 
 import com.gmail.firework4lj.main.Main;
 
+	/* How this class works:
+	 * 
+	 * This class is here only for preventing the flags from despawning. Thus ruining the game.
+	 * The event is fired every time an item tries to despawn. When it does try, it is checked to see if its name matches the name of the flags.
+	 */
+
 public class ItemDespawn implements Listener{
 
 	private Main main;

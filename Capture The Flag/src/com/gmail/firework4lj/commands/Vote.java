@@ -8,6 +8,17 @@ import org.bukkit.entity.Player;
 
 import com.gmail.firework4lj.main.Main;
 
+	/* How this class works.
+	 * Player enters '/vote'
+	 * Player gets an error message telling them to retry their command.
+	 * 
+	 * Player enters '/vote test'
+	 * A number is recorded to arena test.
+	 * Every time a player enters '/vote test', another "vote" is added to the hashmap votes under test arena.
+	 * 
+	 * Another class takes care of choosing which arena has the highest amount of votes, and setting the new current arena.
+	 */
+
 public class Vote implements CommandExecutor{
 
 	private Main main;
