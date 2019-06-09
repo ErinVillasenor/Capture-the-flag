@@ -38,6 +38,8 @@ public class Main extends JavaPlugin{
 	public final static HashMap<String, Integer> bluescore = new HashMap<String, Integer>();
 	public final static HashMap<String, String> ctfclass = new HashMap<String, String>();
 	public final static HashMap<String, Float> xplevel = new HashMap<String, Float>();
+	public final static HashMap<String, Integer> hungerlevel = new HashMap<String, Integer>();
+	public final static HashMap<String, Double> healthlevel = new HashMap<String, Double>();
 	public final static HashMap<String, ItemStack[]> mainenterinv = new HashMap<String, ItemStack[]>();
 	public final static HashMap<String, ItemStack[]> armorenterinv = new HashMap<String, ItemStack[]>();
 	public final static HashMap<String, String> currentarena = new HashMap<String, String>();
