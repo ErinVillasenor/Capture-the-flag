@@ -101,19 +101,24 @@ public class Main extends JavaPlugin{
 	public void onDisable(){
 		getLogger().info("Executing shutdown procedures...");
 		// Clean up the flags on reload
-		List<Entity> entlist = Bukkit.getWorld(this.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).getEntities();
-		for (Entity current : entlist) {
-			if (current instanceof Item) {
-				try{
-				if (((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Redflag") || ((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Blueflag")){
-						current.remove();
-				}
-				} catch (NullPointerException e){
-					// One of the flags is gone.
+		try{
+			List<Entity> entlist = Bukkit.getWorld(this.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).getEntities();
+			for (Entity current : entlist) {
+				if (current instanceof Item) {
+					try{
+					if (((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Redflag") || ((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Blueflag")){
+							current.remove();
+					}
+					} catch (NullPointerException e){
+						// One of the flags is gone.
+					}
 				}
 			}
-		}
 		getLogger().info("Existing flags removed. Forcing in-game ctf players to use /ctf leave...");
+		}catch(Exception e){
+			// No arena is started, dont run the above stuff.
+			getLogger().info("No arena in progress, Null pointer exception. Forcing in-game ctf players to use /ctf leave...");
+		}
 	// Remove all players safely from game
 		for(String pl : Main.ctfingame.keySet()){
 			Bukkit.getPlayerExact(pl).performCommand("ctf leave");
