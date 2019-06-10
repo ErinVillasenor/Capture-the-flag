@@ -50,17 +50,17 @@ public class PlayerRespawn implements Listener{
 
 		
 		if (Main.teamred.containsKey(playerName)&&Main.ctfingame.containsKey(player.getName())) {
+			if(Main.ctfclass.containsKey(playerName)){
+				player.performCommand("classes "+Main.ctfclass.get(player.getName()));
+			}
 			event.setRespawnLocation(redspawn);
 			player.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 14));
-			if(Main.ctfclass.containsKey(playerName)){
-			player.performCommand("classes "+Main.ctfclass.get(player.getName()));
-			}
 		} else if (Main.teamblue.containsKey(playerName)&&Main.ctfingame.containsKey(player.getName())) {
+			if(Main.ctfclass.containsKey(playerName)){
+				player.performCommand("classes "+Main.ctfclass.get(player.getName()));
+			}
 			event.setRespawnLocation(bluespawn);
 			player.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
-			if(Main.ctfclass.containsKey(playerName)){
-			player.performCommand("classes "+Main.ctfclass.get(player.getName()));
-			}
 		} else {
 			if(Main.ctfingame.containsKey(player.getName())){
 			event.setRespawnLocation(LobbySpawn);
