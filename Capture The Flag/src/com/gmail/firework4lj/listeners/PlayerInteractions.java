@@ -82,39 +82,13 @@ public class PlayerInteractions implements Listener{
 	// CLASS SELECTION GUI
 	@EventHandler
 	  public void onInventoryClick(InventoryClickEvent e){
-	    if ((e.getInventory().getName().equals("           Select a Class")) && (e.getRawSlot() < 54) && (e.getRawSlot() > -1)) {
-	      e.getCursor();
-	      ItemStack itemclicked = e.getCurrentItem();
-	      Player p = (Player)e.getWhoClicked();
-	      e.setCancelled(true);
-	      if (itemclicked.getTypeId() == 267){
-	        p.performCommand("class soldier");
-	      }else if (itemclicked.getTypeId() == 261){
-	        p.performCommand("class sniper");
-	      }else if (itemclicked.getTypeId() == 345){
-	        p.performCommand("class scout");
-	      }else if (itemclicked.getTypeId() == 276){
-	        p.performCommand("class heavy");
-	      }else if (itemclicked.getTypeId() == 283){
-	        p.performCommand("class medic");
-	    }
+		Player p = (Player) e.getWhoClicked();
+		if(Main.ctfingame.containsKey(p.getName())){
+			if(e.getSlot() == 39){
+				e.setCancelled(true);
+			}
 	    }else{
 	    	e.setCancelled(false);
 	    }
 	  }
-	
-	@EventHandler
-	public void onPlayerMoveInventory(InventoryClickEvent e){
-		Player p = (Player) e.getWhoClicked();
-		if(main.ctfingame.containsKey(p.getName())){
-			if(e.getSlot() == 39){
-				e.setCancelled(true);
-			}
-		}else{
-			e.setCancelled(false);
-		}  
-	}
-	// END INVENTORY INTERACTIONS
-	
-	
 }
