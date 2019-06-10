@@ -1,6 +1,7 @@
 package com.gmail.firework4lj.commands;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -14,7 +15,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.firework4lj.main.Main;
+import com.gmail.firework4lj.main.Metrics;
 import com.gmail.firework4lj.util.IconMenu;
+
+	/* How this class works:
+	* Player enters '/class example'
+	* if example is found in the main config file, the command then pulls information from the
+	* class folder, where a file named example is found. 
+	* --Null pointer if the file is not there, although that wouldn't happen unless it was manually deleted.--
+	* example file contains inventory information for all armor and items in the class. 
+	* class inventory is put into players inventory.
+	* red or blue flag is "layered" over players helmet to allow others to see what team they are on.
+	* Players name is put into a hashmap along with the class name. This allows the class to be re-applied after the player is killed.
+	* 
+	* Player enters '/classes' and no arguments. If classes have been created by the admin and exist in the config file, 
+	* player receives a message listing all available classes.
+	* If no classes exist, player receives an error message telling them to ask the server admin to setup some classes.
+	*/
 
 public class Classes implements CommandExecutor{
 
@@ -28,39 +45,28 @@ public class Classes implements CommandExecutor{
 		final Player p = (Player) sender;
 		
 		if(cmd.getName().equalsIgnoreCase("classes")){
-//			if(Main.ctfingame.containsKey(p.getName())){
-//				IconMenu Menu = new IconMenu("           Select a Class", 27, new IconMenu.OptionClickEventHandler(){
-//			        public void onOptionClick(IconMenu.OptionClickEvent event) {
-//			        	main.msg(p, ChatColor.GOLD+"You have chosen " + event.getName());
-//			          event.setWillClose(true);
-//			        }
-//			      }
-//			      , this.Plugin)
-//			        .setOption(0, new ItemStack(Material.DIAMOND_SWORD, 1), "§6§lSoldier", new String[] { ChatColor.GREEN+"Normal speed, basic weapons, fair health." })
-//			        .setOption(1, new ItemStack(Material.BOW, 1), "§6§lSniper", new String[] { ChatColor.GREEN+"Normal speed, good shot, lower health." })
-//			        .setOption(2, new ItemStack(Material.COMPASS, 1), "§6§lScout", new String[] { ChatColor.GREEN+"Fast, powerful, but low health." })
-//			      	.setOption(3, new ItemStack(Material.DIAMOND_SWORD, 1), "§6§lHeavy", new String[] { ChatColor.GREEN+"Slow, Lots of health, powerful." })
-//			      	.setOption(4, new ItemStack(Material.GOLD_SWORD, 1), "§6§lMedic", new String[] { ChatColor.GREEN+"Normal speed, bad weapons, lots of health, powerful healing" });
-//			      Menu.open(p);
-//			}else{
-//				main.msg(p, ChatColor.DARK_RED+"You must join the game first! Use /ctf join");
-//			}
-			if(args.length == 1){
-				if(YamlConfiguration.loadConfiguration(new File("plugins/ctf/classes"+args[0]+".yml")) != null){
-					YamlConfiguration c = YamlConfiguration.loadConfiguration(new File("plugins/Capture_the_Flag/classes/"+args[0]+".yml"));
-					main.msg(p, ChatColor.GOLD+"Class changed to: "+args[0]);
-					ItemStack[] content = ((List<ItemStack>) c.get("Classes."+args[0]+".armor")).toArray(new ItemStack[0]);
-					p.getInventory().setArmorContents(content);
-					content = ((List<ItemStack>) c.get("Classes."+args[0]+".items")).toArray(new ItemStack[0]);
-					p.getInventory().setContents(content);
-					main.ctfclass.put(p.getName(), args[0]);
+			if(Main.ctfingame.containsKey(p.getName())){
+				if(args.length == 1){
+					if(YamlConfiguration.loadConfiguration(new File("plugins/Capture-the-Flag/classes"+args[0]+".yml")) != null){
+						YamlConfiguration c = YamlConfiguration.loadConfiguration(new File("plugins/Capture-the-Flag/classes/"+args[0]+".yml"));
+						main.msg(p, ChatColor.GOLD+"Class changed to: "+args[0]);
+						ItemStack[] content = ((List<ItemStack>) c.get("Classes."+args[0]+".armor")).toArray(new ItemStack[0]);
+						p.getInventory().setArmorContents(content);
+						content = ((List<ItemStack>) c.get("Classes."+args[0]+".items")).toArray(new ItemStack[0]);
+						p.getInventory().setContents(content);
+						main.ctfclass.put(p.getName(), args[0]);
+					}else{
+						main.msg(p, ChatColor.DARK_RED+"That is not a valid class!");
+					}
 				}else{
-					main.msg(p, ChatColor.DARK_RED+"That is not a valid class!");
+				    try {
+				    	main.msg(p, ChatColor.GREEN+"Available classes are:");
+						p.sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.GOLD+main.getConfig().getConfigurationSection("Classes").getKeys(false));
+						main.msg(p, ChatColor.GREEN+"Please use /classes (Class Name) to choose a class");
+				    } catch (NullPointerException e) {
+				        main.msg(p, ChatColor.RED+"None. No classes have been setup yet :(");
+					}
 				}
-			}else{
-				main.msg(p, ChatColor.GREEN+"Available classes are:");
-				p.sendMessage(ChatColor.BLACK+"["+ChatColor.GOLD+"Ctf"+ChatColor.BLACK+"] "+ChatColor.GOLD+main.getConfig().getConfigurationSection("Classes").getKeys(false));
-				main.msg(p, ChatColor.GREEN+"Please use /classes (Class Name) to choose a class");
 			}
 		}
 		return false;

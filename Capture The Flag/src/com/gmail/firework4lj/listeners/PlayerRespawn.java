@@ -20,6 +20,11 @@ import org.bukkit.util.Vector;
 
 import com.gmail.firework4lj.main.Main;
 
+	/* What this class does:
+	* This class is called when The player dies, and when the player respawns.
+	* When the player dies, they are checked for if they were holding the flag. If they were holding the flag, the flag is destroyed along with all of there drops, and then the flag is respawned into the game at the flag spawn point.
+	*/
+
 public class PlayerRespawn implements Listener{
 
 	private Main main;

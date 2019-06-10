@@ -9,9 +9,11 @@ import com.gmail.firework4lj.commands.Classes;
 import com.gmail.firework4lj.commands.CommandsMain;
 import com.gmail.firework4lj.commands.Setup;
 import com.gmail.firework4lj.commands.Vote;
+import com.gmail.firework4lj.listeners.CommandPreProcess;
 import com.gmail.firework4lj.listeners.ItemDespawn;
 import com.gmail.firework4lj.listeners.PlayerAttack;
 import com.gmail.firework4lj.listeners.PlayerInteractions;
+import com.gmail.firework4lj.listeners.PlayerLeaveGame;
 import com.gmail.firework4lj.listeners.PlayerPickupItem;
 import com.gmail.firework4lj.listeners.PlayerRespawn;
 
@@ -36,11 +38,17 @@ public class Main extends JavaPlugin{
 	public final static HashMap<String, Integer> bluescore = new HashMap<String, Integer>();
 	public final static HashMap<String, String> ctfclass = new HashMap<String, String>();
 	public final static HashMap<String, Float> xplevel = new HashMap<String, Float>();
+	public final static HashMap<String, Integer> hungerlevel = new HashMap<String, Integer>();
+	public final static HashMap<String, Double> healthlevel = new HashMap<String, Double>();
 	public final static HashMap<String, ItemStack[]> mainenterinv = new HashMap<String, ItemStack[]>();
 	public final static HashMap<String, ItemStack[]> armorenterinv = new HashMap<String, ItemStack[]>();
 	public final static HashMap<String, String> currentarena = new HashMap<String, String>();
 	public final static HashMap<String, Integer> votes = new HashMap<String, Integer>();
 	public final static HashMap<String, Boolean> voted = new HashMap<String, Boolean>();
+	public final static HashMap<String, Integer> joinx = new HashMap<String, Integer>();
+	public final static HashMap<String, Integer> joiny = new HashMap<String, Integer>();
+	public final static HashMap<String, Integer> joinz = new HashMap<String, Integer>();
+	public final static HashMap<String, String> joinw = new HashMap<String, String>();
 	
 	@Override
 	public void onEnable(){
@@ -50,14 +58,16 @@ public class Main extends JavaPlugin{
 			this.getLogger().info("Generating config.yml...");
 			this.getConfig().options().copyDefaults(true);
 			this.saveConfig();
+			getLogger().info("Config.yml generated!");
 		}
 		
 		// Metrics
 	    try {
 	        Metrics metrics = new Metrics(this);
 	        metrics.start();
+	        getLogger().info("Metrics enabled!");
 	    } catch (IOException e) {
-	        // Failed to submit the stats :-(
+	        getLogger().info("Enabling of Metrics failed :(");
 	    }
 	    
 		// Registering commands:
@@ -74,6 +84,8 @@ public class Main extends JavaPlugin{
 		pm.registerEvents(new PlayerInteractions(this), this);
 		pm.registerEvents(new PlayerAttack(this), this);
 		pm.registerEvents(new PlayerRespawn(this), this);
+		pm.registerEvents(new CommandPreProcess(this), this);
+		pm.registerEvents(new PlayerLeaveGame(this), this);
 	
 		// Registering default arena (1st in config)
 		if (this.getConfig().getConfigurationSection("arenas") == null){	
@@ -82,32 +94,38 @@ public class Main extends JavaPlugin{
 		}else{
 				String arena = this.getConfig().getConfigurationSection("arenas").getKeys(false).iterator().next();
 				Main.currentarena.put("arena", "arenas."+arena);
+				getLogger().info("Arenas loaded!");
 		}
 		getLogger().info("Capture the Flag has been enabled.");
 	}
 	
 	@Override
 	public void onDisable(){
-		
+		getLogger().info("Executing shutdown procedures...");
+		// Clean up the flags on reload
+		try{
+			List<Entity> entlist = Bukkit.getWorld(this.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).getEntities();
+			for (Entity current : entlist) {
+				if (current instanceof Item) {
+					try{
+					if (((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Redflag") || ((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Blueflag")){
+							current.remove();
+					}
+					} catch (NullPointerException e){
+						// One of the flags is gone.
+					}
+				}
+			}
+		getLogger().info("Existing flags removed. Forcing in-game ctf players to use /ctf leave...");
+		}catch(Exception e){
+			// No arena is started, dont run the above stuff.
+			getLogger().info("No arena in progress, Null pointer exception. Forcing in-game ctf players to use /ctf leave...");
+		}
 	// Remove all players safely from game
 		for(String pl : Main.ctfingame.keySet()){
 			Bukkit.getPlayerExact(pl).performCommand("ctf leave");
 		}
-		// Clean up the flags on reload
-		if (!Main.currentarena.isEmpty()){
-		List<Entity> entlist = Bukkit.getWorld(this.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).getEntities();
-		for (Entity current : entlist) {
-			if (current instanceof Item) {
-				if(((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Redflag")) {
-					current.remove();
-				}else if(((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Blueflag")) {
-					current.remove();
-				}
-			}
-		}
-	}else{
-		
-	}	
+		getLogger().info("Players removed from game. Shutdown complete.");
 }
 	
 	public final void msg(Player p, String msg) {

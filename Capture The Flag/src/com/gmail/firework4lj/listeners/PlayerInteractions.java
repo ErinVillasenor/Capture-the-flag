@@ -11,6 +11,25 @@ import org.bukkit.inventory.ItemStack;
 
 import com.gmail.firework4lj.main.Main;
 
+	/* How this class works:
+	 * 
+	 * This class listens for all player interactions.
+	 * 
+	 * Block placement:
+	 * While the player is in game, and if the player is not opped, the event is cancelled, causing the player to not be able to place blocks.
+	 * Otherwise, they can place blocks.
+	 * 
+	 * Block destruction:
+	 * Works the same way as block placement only it applies to block destruction and uses a separate event.
+	 * 
+	 * Item dropping:
+	 * If the player is in game, the event is cancelled. If they are not in game, the event is not cancelled.
+	 * 
+	 * Inventory manipulation:
+	 * If the player is in game, they are allowed to move items within there inventory except for there helmet. 
+	 * Since there helmet is supposed to house the wool block showing what team they are on, it is necessary to disallow the movement of it.
+	 */
+
 public class PlayerInteractions implements Listener{
 
 	private Main main;
@@ -83,6 +102,18 @@ public class PlayerInteractions implements Listener{
 	    	e.setCancelled(false);
 	    }
 	  }
+	
+	@EventHandler
+	public void onPlayerMoveInventory(InventoryClickEvent e){
+		Player p = (Player) e.getWhoClicked();
+		if(main.ctfingame.containsKey(p.getName())){
+			if(e.getSlot() == 39){
+				e.setCancelled(true);
+			}
+		}else{
+			e.setCancelled(false);
+		}  
+	}
 	// END INVENTORY INTERACTIONS
 	
 	

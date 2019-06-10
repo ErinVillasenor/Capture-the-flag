@@ -191,12 +191,13 @@ public class PlayerPickupItem implements Listener{
 						List<Entity> entlist = Bukkit.getWorld(main.getConfig().getString(Main.currentarena.get("arena")+".redfs.w")).getEntities();
 						for (Entity current : entlist) {
 							if (current instanceof Item) {
-								if(((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Redflag")) {
-									current.remove();
-								}else if(((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Blueflag")) {
-									current.remove();
+								try{
+								if (((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Redflag") || ((Item) current).getItemStack().getItemMeta().getDisplayName().equals("Blueflag")){
+										current.remove();
 								}
-							}else{
+								} catch (NullPointerException e){
+									// One of the flags is gone.
+								}
 							}
 						}
 						Main.blueflag.clear();
