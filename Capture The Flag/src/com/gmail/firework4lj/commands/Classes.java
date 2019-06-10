@@ -50,7 +50,7 @@ public class Classes implements CommandExecutor{
 					if(YamlConfiguration.loadConfiguration(new File("plugins/Capture-the-Flag/classes"+args[0]+".yml")) != null){
 						YamlConfiguration c = YamlConfiguration.loadConfiguration(new File("plugins/Capture-the-Flag/classes/"+args[0]+".yml"));
 						p.setHealth(0);
-						main.msg(p, ChatColor.GOLD+"To change your class, you have to re-born.");
+						main.msg(p, ChatColor.GOLD+"To change your class, you have to be re-born.");
 						main.msg(p, ChatColor.GOLD+"Class changed to: "+args[0]);
 						ItemStack[] content = ((List<ItemStack>) c.get("Classes."+args[0]+".armor")).toArray(new ItemStack[0]);
 						p.getInventory().setArmorContents(content);
