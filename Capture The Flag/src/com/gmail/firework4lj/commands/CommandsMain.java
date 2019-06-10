@@ -269,7 +269,6 @@ public class CommandsMain implements CommandExecutor{
 		Location JoinLocation = new Location(Bukkit.getWorld(Main.joinw.get(p.getName())), ((Integer) Main.joinx.get(p.getName())), ((Integer) Main.joiny.get(p.getName())), ((Integer) Main.joinz.get(p.getName())));
 
 		if(Main.ctfingame.containsKey(p.getName())){
-			// TODO: Add a hashmap to not fully heal and replenish hunger for the player
 			p.setHealth(Main.healthlevel.get(p.getName()));
 			p.setFoodLevel(Main.hungerlevel.get(p.getName()));
 			Main.hungerlevel.remove(p.getName());
@@ -328,9 +327,9 @@ public class CommandsMain implements CommandExecutor{
 				p.setPlayerListName(defaultName.substring(0, 14));
 				p.setDisplayName(defaultName.substring(0, 13));
 			}
-			}else{
-				main.msg(p, ChatColor.AQUA+"You are not in a game!");
-			}
+		}else{
+			main.msg(p, ChatColor.AQUA+"You are not in a game!");
+		}
 	}
 }
 
