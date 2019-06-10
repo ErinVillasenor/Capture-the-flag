@@ -60,7 +60,7 @@ public class PlayerRespawn implements Listener{
 			player.getInventory().setHelmet(new ItemStack(Material.WOOL, 1, (short) 11));
 			if(Main.ctfclass.containsKey(playerName)){
 			player.performCommand("classes "+Main.ctfclass.get(player.getName()));
-			
+			}
 		} else {
 			if(Main.ctfingame.containsKey(player.getName())){
 			event.setRespawnLocation(LobbySpawn);
